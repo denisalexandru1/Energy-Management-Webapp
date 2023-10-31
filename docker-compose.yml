@@ -1,0 +1,81 @@
+version: '3'
+
+services:
+
+  userdb:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'user-management'
+      MYSQL_ROOT_PASSWORD: 'rootpass'
+    ports:
+      - "3307:3306"
+    volumes:
+      - my-db1:/var/lib/mysql
+    networks:
+      demo_net:
+
+  devicedb:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'device-management'
+      MYSQL_ROOT_PASSWORD: 'rootpass'
+    ports:
+      - "3308:3306"
+    volumes:
+      - my-db2:/var/lib/mysql
+    networks:
+      demo_net:
+
+  spring-user:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - "8082:8080"
+    environment:
+      - DB_IP=userdb
+      - DB_PORT=3306
+      - DB_DBNAME=user-management
+      - DB_USER=root
+      - DB_PASSWORD=rootpass
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.2
+
+    spring-device:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - "8083:8081"
+    environment:
+      - DB_IP=devicedb
+      - DB_PORT=3306
+      - DB_DBNAME=device-management
+      - DB_USER=root
+      - DB_PASSWORD=rootpass
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.3
+
+    frontend:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+       - "3001:3000"
+    environment:
+      - BACKEND=172.30.0.2
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.10
+
+volumes:
+  my-db1:
+  my-db2:
+
+networks:
+  demo_net:
+    external: true
