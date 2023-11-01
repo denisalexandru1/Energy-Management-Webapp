@@ -4,6 +4,7 @@ import UserLoginPanel from './UserLoginPanel';
 import { useNavigate } from 'react-router-dom';
 
 function LogInHome() {
+  localStorage.clear();
   const [loggedIn, setLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loggedUsername, setLoggedUsername] = useState('');

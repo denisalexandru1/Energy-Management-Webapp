@@ -2,7 +2,9 @@ package com.example.devicemanagement.controller;
 
 import com.example.devicemanagement.dto.DeviceRegisterDTO;
 import com.example.devicemanagement.dto.DeviceDTO;
+import com.example.devicemanagement.dto.UserDTO;
 import com.example.devicemanagement.service.DeviceService;
+import com.example.devicemanagement.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +15,11 @@ import java.util.UUID;
 @RestController
 public class DeviceController {
     private final DeviceService deviceService;
+    private final UserService userService;
 
-    public DeviceController(DeviceService deviceService){
+    public DeviceController(DeviceService deviceService, UserService userService){
         this.deviceService = deviceService;
+        this.userService = userService;
     }
 
     @PostMapping("/device")
@@ -38,6 +42,7 @@ public class DeviceController {
 
     @PutMapping("/device/{id}")
     ResponseEntity<DeviceDTO> updateDevice(@PathVariable("id") UUID uuid, @RequestBody DeviceDTO dto){
+        UserDTO user = userService.getUserById(dto.userUuid);
         DeviceDTO updatedDevice = deviceService.updateDevice(uuid, dto);
         return ResponseEntity.ok(updatedDevice);
     }

@@ -16,8 +16,10 @@ export default class UserLoginPanel extends React.Component {
   logInListener() {
     const requestOptions = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
+      //mode: 'no-cors',
       method: 'POST',
       body: JSON.stringify({
         username: this.state.username,
@@ -25,7 +27,7 @@ export default class UserLoginPanel extends React.Component {
       })
     };
 
-    fetch('http://localhost:8080/login', requestOptions)
+    fetch('http://localhost:8082/login', requestOptions)
       .then(res => {
         if (res.ok) {
           res.json().then(body => {

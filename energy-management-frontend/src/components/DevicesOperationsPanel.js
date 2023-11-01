@@ -19,23 +19,36 @@ export default class DevicesOperations extends React.Component {
     this.handleEditDevice = this.handleEditDevice.bind(this);
   }
 
-
   componentDidMount() {
-    fetch('http://localhost:8081/device')
+    fetch('http://localhost:8083/device')
       .then(res => res.json())
       .then(data => this.setState({ devices: data }))
       .then(() => console.log(this.state.devices))
       .catch(err => console.log(err));
-    fetch('http://localhost:8080/user')
+    fetch('http://localhost:8082/user')
       .then(res => res.json())
       .then(data => this.setState({ users: data }))
       .then(() => console.log(this.state.users))
       .catch(err => console.log(err));
   }
 
+  refreshData = () => {
+    fetch('http://localhost:8082/user')
+      .then(res => res.json())
+      .then(data => this.setState({ users: data }))
+      .catch(err => console.log(err));
+
+    fetch('http://your-api-url/devices')
+      .then(response => response.json())
+      .then(data => this.setState({ devices: data }))
+      .catch(err => console.log(err));
+
+    this.componentDidMount();
+  }
+
   handleDeleteDevice(id) {
     // Send DELETE request to server to delete device with given id
-    fetch(`http://localhost:8081/device/${id}`, {
+    fetch(`http://localhost:8083/device/${id}`, {
       method: 'DELETE'
     })
       .then(res => {
@@ -55,7 +68,7 @@ export default class DevicesOperations extends React.Component {
 
   handleEditDevice(device) {
     console.log("handle edit device: " + device)
-    fetch(`http://localhost:8081/device/${device.id}`, {
+    fetch(`http://localhost:8083/device/${device.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -95,8 +108,7 @@ export default class DevicesOperations extends React.Component {
       })
     };
     
-
-    fetch('http://localhost:8081/device', requestOptions)
+    fetch('http://localhost:8083/device', requestOptions)
       .then(res => {
         if (res.ok) {
           console.log('Device added successfully');
@@ -110,7 +122,6 @@ export default class DevicesOperations extends React.Component {
       })
       .catch(err => console.log(err));
   }
-  
   
   handleChange(event) {
     const { name, value } = event.target;
@@ -201,6 +212,9 @@ export default class DevicesOperations extends React.Component {
           <br/>
           <Button variant="contained" color="success" onClick={this.handleAddDevice}>
             Add New Device
+          </Button>
+          <Button variant="contained" color="primary" onClick={this.refreshData}>
+            Refresh
           </Button>
         </Grid>
       </Box>

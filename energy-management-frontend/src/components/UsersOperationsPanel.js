@@ -18,7 +18,7 @@ export default class UsersOperations extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:8080/user')
+    fetch('http://localhost:8082/user')
       .then(res => res.json())
       .then(data => this.setState({ users: data }))
       .then(() => console.log(this.state.users))
@@ -27,7 +27,7 @@ export default class UsersOperations extends React.Component {
 
   handleDeleteUser(id) {
     // Send DELETE request to server to delete user with given id
-    fetch(`http://localhost:8080/user/${id}`, {
+    fetch(`http://localhost:8082/user/${id}`, {
       method: 'DELETE'
     })
       .then(res => {
@@ -47,7 +47,7 @@ export default class UsersOperations extends React.Component {
 
   handleEditUser(user) {
     console.log("handle edit user: " + JSON.stringify(user))
-    fetch(`http://localhost:8080/user/${user.id}`, {
+    fetch(`http://localhost:8082/user/${user.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ export default class UsersOperations extends React.Component {
       })
     };
   
-    fetch('http://localhost:8080/user', requestOptions)
+    fetch('http://localhost:8082/user', requestOptions)
       .then(res => {
         if (res.ok) {
           console.log('User added successfully');
@@ -115,13 +115,13 @@ export default class UsersOperations extends React.Component {
       { field: 'id', headerName: 'Id', editable: false, width: 350 },
       { field: 'username', headerName: 'Username', editable: true, width: 200 },
       { field: 'password', headerName: 'Password', editable: true, width: 150 },
-      { field: 'isAdmin', headerName: 'Is Admin?', editable: true, width: 150,
+      { field: 'isAdmin', headerName: 'Is Admin?', editable: false, width: 150,
         renderCell: (params) => {
           let user = params.row;
           return (
             <Checkbox
               checked={user.isAdmin}
-              onChange={() => {user.isAdmin = !user.isAdmin;}}
+              disabled
             />
           );
         }

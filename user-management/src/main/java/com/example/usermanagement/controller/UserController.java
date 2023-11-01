@@ -23,7 +23,7 @@ public class UserController {
     ResponseEntity<UserDTO> createUser(@RequestBody UserRegisterDTO dto){
         UserDTO registeredUser = userService.registerUser(dto);
 
-        WebClient client = WebClient.create("http://localhost:8081");
+        WebClient client = WebClient.create("http://172.30.0.5:8081");
         ResponseEntity<?> responseEntity = client.post()
                 .uri("/user")
                 .bodyValue(registeredUser)
@@ -47,7 +47,7 @@ public class UserController {
     ResponseEntity<UserDTO> updateUser(@PathVariable("id") UUID uuid, @RequestBody UserDTO dto){
         UserDTO updatedUser = userService.updateUser(uuid, dto);
 
-        WebClient client = WebClient.create("http://localhost:8081");
+        WebClient client = WebClient.create("http://172.30.0.5:8081");
         ResponseEntity<?> responseEntity = client.put()
                 .uri("/user/{id}", uuid)
                 .bodyValue(updatedUser)
@@ -65,7 +65,7 @@ public class UserController {
     ResponseEntity<?> deleteUser(@PathVariable("id") UUID uuid){
         userService.deleteUser(uuid);
 
-        WebClient client = WebClient.create("http://localhost:8081");
+        WebClient client = WebClient.create("http://172.30.0.5:8081");
         ResponseEntity<?> responseEntity = client.delete()
                 .uri("/user/{id}", uuid)
                 .retrieve()

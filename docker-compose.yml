@@ -14,6 +14,8 @@ services:
       - my-db1:/var/lib/mysql
     networks:
       demo_net:
+        ipv4_address: 172.30.0.2
+
 
   devicedb:
     image: mysql
@@ -27,10 +29,13 @@ services:
       - my-db2:/var/lib/mysql
     networks:
       demo_net:
+        ipv4_address: 172.30.0.3
+
 
   spring-user:
+    restart: always
     build:
-      context: ./
+      context: ./user-management
       dockerfile: ./Dockerfile
     ports:
       - "8082:8080"
@@ -42,11 +47,12 @@ services:
       - DB_PASSWORD=rootpass
     networks:
       demo_net:
-        ipv4_address: 172.30.0.2
+        ipv4_address: 172.30.0.4
 
-    spring-device:
+  spring-device:
+    restart: always
     build:
-      context: ./
+      context: ./device-management
       dockerfile: ./Dockerfile
     ports:
       - "8083:8081"
@@ -58,11 +64,11 @@ services:
       - DB_PASSWORD=rootpass
     networks:
       demo_net:
-        ipv4_address: 172.30.0.3
+        ipv4_address: 172.30.0.5
 
-    frontend:
+  frontend:
     build:
-      context: ./
+      context: ./energy-management-frontend
       dockerfile: ./Dockerfile
     ports:
        - "3001:3000"

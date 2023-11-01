@@ -18,7 +18,7 @@ export default class DevicesOfUser extends React.Component {
             method: 'GET'
         };
 
-        fetch('http://localhost:8081/device/user/' + this.props.userId, requestOptions)
+        fetch('http://localhost:8083/device/user/' + this.props.userId, requestOptions)
             .then(res => {
                 if (res.ok) {
                     res.json().then(body => {
