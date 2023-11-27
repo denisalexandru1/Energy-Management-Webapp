@@ -115,13 +115,13 @@ export default class UsersOperations extends React.Component {
       { field: 'id', headerName: 'Id', editable: false, width: 350 },
       { field: 'username', headerName: 'Username', editable: true, width: 200 },
       { field: 'password', headerName: 'Password', editable: true, width: 150 },
-      { field: 'isAdmin', headerName: 'Is Admin?', editable: true, width: 150,
+      { field: 'isAdmin', headerName: 'Is Admin?', editable: false, width: 150,
         renderCell: (params) => {
           let user = params.row;
           return (
             <Checkbox
               checked={user.isAdmin}
-              onChange={() => {user.isAdmin = !user.isAdmin;}}
+              disabled
             />
           );
         }

@@ -16,8 +16,10 @@ export default class UserLoginPanel extends React.Component {
   logInListener() {
     const requestOptions = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
+      //mode: 'no-cors',
       method: 'POST',
       body: JSON.stringify({
         username: this.state.username,

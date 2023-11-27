@@ -19,7 +19,6 @@ export default class DevicesOperations extends React.Component {
     this.handleEditDevice = this.handleEditDevice.bind(this);
   }
 
-
   componentDidMount() {
     fetch('http://localhost:8081/device')
       .then(res => res.json())
@@ -31,6 +30,20 @@ export default class DevicesOperations extends React.Component {
       .then(data => this.setState({ users: data }))
       .then(() => console.log(this.state.users))
       .catch(err => console.log(err));
+  }
+
+  refreshData = () => {
+    fetch('http://localhost:8082/user')
+      .then(res => res.json())
+      .then(data => this.setState({ users: data }))
+      .catch(err => console.log(err));
+
+    fetch('http://your-api-url/devices')
+      .then(response => response.json())
+      .then(data => this.setState({ devices: data }))
+      .catch(err => console.log(err));
+
+    this.componentDidMount();
   }
 
   handleDeleteDevice(id) {
@@ -110,7 +123,6 @@ export default class DevicesOperations extends React.Component {
       })
       .catch(err => console.log(err));
   }
-  
   
   handleChange(event) {
     const { name, value } = event.target;
@@ -201,6 +213,9 @@ export default class DevicesOperations extends React.Component {
           <br/>
           <Button variant="contained" color="success" onClick={this.handleAddDevice}>
             Add New Device
+          </Button>
+          <Button variant="contained" color="primary" onClick={this.refreshData}>
+            Refresh
           </Button>
         </Grid>
       </Box>

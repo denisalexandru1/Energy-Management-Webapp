@@ -31,6 +31,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO getUserById(UUID userUuid) {
+        Optional<User> user = userRepository.findById(userUuid);
+        if(user.isPresent()){
+            return userMapper.toDTO(user.get());
+        }
+        else{
+            throw new InvalidParameterException("There is no user with uuid " + userUuid);
+        }
+    }
+
+    @Override
     public UserDTO updateUser(UUID uuid, UserDTO dto) {
         Optional<User> user = userRepository.findById(uuid);
         if (user.isPresent()) {
