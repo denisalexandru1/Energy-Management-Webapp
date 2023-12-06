@@ -89,6 +89,11 @@
             <artifactId>junit</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>5.16.0</version> <!-- Use the latest version available -->
+        </dependency>
     </dependencies>
 
     <build>
