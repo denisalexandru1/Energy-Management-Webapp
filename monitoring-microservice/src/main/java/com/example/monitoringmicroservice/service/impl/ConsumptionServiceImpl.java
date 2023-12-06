@@ -41,8 +41,9 @@ public class ConsumptionServiceImpl implements ConsumptionService {
                 sb.append("\"maxHourlyConsumption\":" + "\"" + device.maxHourlyConsumption + "\",");
                 sb.append("\"totalConsumption\":" + "\"" + totalConsumption + "\"");
                 sb.append("}");
-                System.out.println("Sent to Socket: " + sb.toString());
+
                 template.convertAndSend("/topic/notifications", sb.toString());
+                System.out.println("Sent to Socket: " + sb.toString());
             }
         }
     }

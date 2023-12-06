@@ -1,7 +1,7 @@
 @echo off
 
 REM List of device IDs
-set device_ids=da7ea9c9-3e8f-4d0a-a662-1470c3d8532b
+set device_ids=33f0d541-9fec-4b3b-8ab0-2e48d2353016
 
 REM Loop through each device ID and run the Java application
 for %%i in (%device_ids%) do (

@@ -31,6 +31,19 @@ services:
       demo_net:
         ipv4_address: 172.30.0.3
 
+  monitoringdb:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'monitoring-microservice'
+      MYSQL_ROOT_PASSWORD: 'rootpass'
+    ports:
+      - "3309:3306"
+    volumes:
+      - my-db3:/var/lib/mysql
+    networks:
+      demo_net:
+        ipv4_address: 172.30.0.7
 
   spring-user:
     restart: always
@@ -66,6 +79,36 @@ services:
       demo_net:
         ipv4_address: 172.30.0.5
 
+  spring-monitoring:
+    restart: always
+    build:
+      context: ./monitoring-microservice
+      dockerfile: ./Dockerfile
+    ports:
+      - "8090:8090"
+    environment:
+      - DB_IP=monitoringdb
+      - DB_PORT=3306
+      - DB_DBNAME=monitoring-microservice
+      - DB_USER=root
+      - DB_PASSWORD=rootpass
+    networks:
+        demo_net:
+            ipv4_address: 172.30.0.6
+
+  rabbitmq:
+    image: rabbitmq:management
+    hostname: rabbitmq
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      demo_net:
+
   frontend:
     build:
       context: ./energy-management-frontend
@@ -81,6 +124,7 @@ services:
 volumes:
   my-db1:
   my-db2:
+  my-db3:
 
 networks:
   demo_net:

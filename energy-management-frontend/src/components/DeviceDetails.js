@@ -36,7 +36,7 @@ const DevicesDetails = (props) => {
         const formattedDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
 
         console.log(formattedDate)
-        fetch(`http://localhost:8082/measurements-by-day/${deviceUuid}/${formattedDate}`)
+        fetch(`http://localhost:8090/measurements-by-day/${deviceUuid}/${formattedDate}`)
         .then(res => res.json())
         .then(data => setMeasurements(data))
         .catch(err => console.log(err));updateHourlyDifferences();

@@ -15,7 +15,7 @@ public class QueueServiceImpl implements QueueService {
     @Override
     public void SendPostRequest(DeviceDTO dto) {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost"); // RabbitMQ server host
+        factory.setHost("rabbitmq"); // RabbitMQ server host
         String queueName = "device-crud-queue";
         try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel())
         {
@@ -41,7 +41,7 @@ public class QueueServiceImpl implements QueueService {
     @Override
     public void SendPutRequest(DeviceDTO dto) {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost"); // RabbitMQ server host
+        factory.setHost("rabbitmq"); // RabbitMQ server host
         String queueName = "device-crud-queue";
         try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel())
         {
@@ -67,7 +67,7 @@ public class QueueServiceImpl implements QueueService {
     @Override
     public void SendDeleteRequest(UUID uuid){
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost"); // RabbitMQ server host
+        factory.setHost("rabbitmq"); // RabbitMQ server host
         String queueName = "device-crud-queue";
         try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel())
         {
