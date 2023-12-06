@@ -5,6 +5,7 @@ import Home from './components/Home';
 import LogInHome from './components/LogInHome';
 import AdminDashboard from './components/AdminDashboard';
 import UserDashboard from './components/UserDashboard';
+import DeviceDetails from './components/DeviceDetails';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login-panel" element={<LogInHome/>} />
         <Route exact path="/admin-view" element={<AdminDashboard/>} />
         <Route exact path="/user-view" element={<UserDashboard/>} />
+        <Route exact path="/device/:id" element={<DeviceDetails/>}/>
         <Route path="*" component={() => "404 NOT FOUND"} />
       </Routes>
     </Router>

@@ -38,12 +38,26 @@ export default class DevicesOfUser extends React.Component {
             })
     }
 
+    handleViewDevice(device) {
+        window.open('/device/' + device.id, '_blank', 'width=1000,height=1000');
+    }
+
     render() {
         const columns = [
             {field : 'id', headerName: 'Id', width: 350},
             {field : 'description', headerName: 'Description', width: 150},
             {field : 'address', headerName: 'Address', width: 150},
-            {field : 'maxHC', headerName: 'Max Hourly Consumption', width: 150}
+            {field : 'maxHC', headerName: 'Max Hourly Consumption', width: 150},
+            {field : 'actions', headerName: 'Actions', width: 150,
+                renderCell : (params) => {
+                    const device = params.row;
+                    return(
+                        <>
+                            <Button variant='contained' color='primary' onClick={() => this.handleViewDevice(device)}>View More</Button>
+                        </>
+                    )
+                }
+            }
         ];
 
         const rows = this.state.devices.map(device => ({id: device.uuid, description: device.description, address: device.address, maxHC: device.maxHourlyConsumption}));
