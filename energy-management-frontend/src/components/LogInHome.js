@@ -9,6 +9,7 @@ function LogInHome() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loggedUsername, setLoggedUsername] = useState('');
   const [loggedUserId, setLoggedUserId] = useState('');
+  const [jwtToken, setToken] = useState('');
   const navigate = useNavigate();
 
   function handleLogin() {
@@ -27,16 +28,21 @@ function LogInHome() {
     setLoggedUsername(username);
   }
 
+  function handleSetToken(token) {
+    setToken(token);
+  }
+
   if (!loggedIn) {
     return (
       <Box sx={{ p: 3 }}>
         <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <UserLoginPanel setLoggedIn={handleLogin} setIsAdmin={handleSetIsAdmin} setLoggedUserId={handleSetLoggedUserId} setLoggedUsername={handleSetLoggedUsername}/>
+          <UserLoginPanel setLoggedIn={handleLogin} setIsAdmin={handleSetIsAdmin} setLoggedUserId={handleSetLoggedUserId} setLoggedUsername={handleSetLoggedUsername} setToken = {handleSetToken}/>
         </Grid>
       </Box>
     );
   }
   
+  localStorage.setItem('jwtToken', jwtToken);
   localStorage.setItem('isAdmin', isAdmin);
   localStorage.setItem('loggedUserId', loggedUserId);
   localStorage.setItem('loggedUsername', loggedUsername);

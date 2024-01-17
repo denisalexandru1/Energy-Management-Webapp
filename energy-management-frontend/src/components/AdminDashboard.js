@@ -8,7 +8,6 @@ import DevicesOperations from './DevicesOperationsPanel';
 export default function AdminDashboard(props) {
   const location = useLocation();
 
-  //get isAdmin from localStorage
   const isAdmin = localStorage.getItem('isAdmin');
   console.log(isAdmin);
 

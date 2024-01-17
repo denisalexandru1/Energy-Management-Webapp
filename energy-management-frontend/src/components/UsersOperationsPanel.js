@@ -18,7 +18,15 @@ export default class UsersOperations extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:8080/user')
+    fetch('http://localhost:8080/user',
+      {
+        method: 'GET',
+        headers: 
+        {
+          'Authorization': localStorage.getItem('jwtToken')
+        }
+      }
+    )
       .then(res => res.json())
       .then(data => this.setState({ users: data }))
       .then(() => console.log(this.state.users))
@@ -28,7 +36,11 @@ export default class UsersOperations extends React.Component {
   handleDeleteUser(id) {
     // Send DELETE request to server to delete user with given id
     fetch(`http://localhost:8080/user/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: 
+      {
+        'Authorization': localStorage.getItem('jwtToken')
+      }
     })
       .then(res => {
         if (res.ok) {
@@ -50,7 +62,8 @@ export default class UsersOperations extends React.Component {
     fetch(`http://localhost:8080/user/${user.id}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('jwtToken')
       },
       body: JSON.stringify({
         username: user.username,
@@ -76,7 +89,8 @@ export default class UsersOperations extends React.Component {
     const requestOptions = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('jwtToken')
       },
       body: JSON.stringify({
         username: this.state.newUserUsername,
@@ -99,6 +113,10 @@ export default class UsersOperations extends React.Component {
       .catch(err => console.log(err));
   }
   
+  handleChatWithUser(id) {
+    console.log("handle chat with user: " + id)
+    window.open('/chat/' + id, '_blank', 'width=1000,height=1000');
+  }
   
   handleChange = (event) => {
     const target = event.target;
@@ -112,10 +130,10 @@ export default class UsersOperations extends React.Component {
 
   render() {
     const columns = [
-      { field: 'id', headerName: 'Id', editable: false, width: 350 },
-      { field: 'username', headerName: 'Username', editable: true, width: 200 },
-      { field: 'password', headerName: 'Password', editable: true, width: 150 },
-      { field: 'isAdmin', headerName: 'Is Admin?', editable: false, width: 150,
+      { field: 'id', headerName: 'Id', editable: false, width: 400 },
+      { field: 'username', headerName: 'Username', editable: true, width: 300 },
+      { field: 'password', headerName: 'Password', editable: true, width: 200 },
+      { field: 'isAdmin', headerName: 'Is Admin?', editable: false, width: 200,
         renderCell: (params) => {
           let user = params.row;
           return (
@@ -126,7 +144,7 @@ export default class UsersOperations extends React.Component {
           );
         }
       },
-      { field: 'actions', headerName: 'Actions', sortable: false, width: 200,
+      { field: 'actions', headerName: 'Actions', sortable: false, width: 500,
         renderCell: (params) => {
           const editedUser = params.row;
           return (
@@ -137,6 +155,9 @@ export default class UsersOperations extends React.Component {
               <Button variant="contained" color="error" onClick={() => this.handleDeleteUser(editedUser.id)}>
                 Delete
               </Button>
+              <Button variant="contained" color="success" onClick={() => this.handleChatWithUser(editedUser.id)}>
+                Open chat
+              </Button>
             </>
           );
         }
@@ -146,7 +167,7 @@ export default class UsersOperations extends React.Component {
     const rows = this.state.users.map(user => ({ id: user.uuid, username: user.username, password: user.password, isAdmin: user.isAdmin }));
 
     return (
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ p: 3 }} style = {{width: '100%'}}>
         <h1>Users</h1>
         <DataGrid
           columns={columns}

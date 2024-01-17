@@ -6,6 +6,7 @@ import LogInHome from './components/LogInHome';
 import AdminDashboard from './components/AdminDashboard';
 import UserDashboard from './components/UserDashboard';
 import DeviceDetails from './components/DeviceDetails';
+import ChatComponent from './components/ChatComponent';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route exact path="/admin-view" element={<AdminDashboard/>} />
         <Route exact path="/user-view" element={<UserDashboard/>} />
         <Route exact path="/device/:id" element={<DeviceDetails/>}/>
+        <Route exact path="/chat/:id" element={<ChatComponent senderId = {localStorage.getItem('loggedUserId')}/>}/>
         <Route path="*" component={() => "404 NOT FOUND"} />
       </Routes>
     </Router>

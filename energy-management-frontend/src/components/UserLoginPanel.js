@@ -19,42 +19,45 @@ export default class UserLoginPanel extends React.Component {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      //mode: 'no-cors',
       method: 'POST',
       body: JSON.stringify({
         username: this.state.username,
         password: this.state.password
       })
     };
-
+  
     fetch('http://localhost:8080/login', requestOptions)
       .then(res => {
         if (res.ok) {
-          res.json().then(body => {
-            console.log(body);
-            if (body.username === this.state.username && body.password === this.state.password) {
-              console.log("Logged in successfully");
-              alert("Logged in successfully");
-              this.props.setLoggedIn();
-              this.props.setIsAdmin(body.isAdmin);
-              this.props.setLoggedUserId(body.uuid);
-              this.props.setLoggedUsername(body.username);
-            }
-            else {
-              console.log("Invalid username or password");
-              alert("Invalid username or password");
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
-        }
-        else {
-          console.log("Error");
-          alert("Error");
+          return res.json();
+        } else {
+          throw new Error('Login failed');
         }
       })
+      .then(body => {
+        console.log(body.token);
+
+        if (body.token) {
+          this.props.setToken(body.token);
+          console.log("Token saved");
+          this.props.setLoggedIn();
+          this.props.setIsAdmin(body.user.isAdmin);
+          this.props.setLoggedUserId(body.user.uuid);
+          this.props.setLoggedUsername(body.user.username);
+  
+          console.log("Logged in successfully");
+          alert("Logged in successfully");
+        } else {
+          console.log("Invalid username or password");
+          alert("Invalid username or password");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error during login");
+      });
   }
+  
 
   
   handleChange(event) {
