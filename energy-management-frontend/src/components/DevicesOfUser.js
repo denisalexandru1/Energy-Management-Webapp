@@ -13,7 +13,8 @@ export default class DevicesOfUser extends React.Component {
     componentDidMount() {
         const requestOptions = {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('jwtToken')
             },
             method: 'GET'
         };

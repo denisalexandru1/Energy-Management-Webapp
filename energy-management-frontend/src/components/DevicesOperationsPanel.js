@@ -20,12 +20,24 @@ export default class DevicesOperations extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:8083/device')
+    fetch('http://localhost:8083/device', {
+      method: 'GET',
+      headers:
+      {
+        'Authorization': localStorage.getItem('jwtToken')
+      }
+      })
       .then(res => res.json())
       .then(data => this.setState({ devices: data }))
       .then(() => console.log(this.state.devices))
       .catch(err => console.log(err));
-    fetch('http://localhost:8082/user')
+    fetch('http://localhost:8082/user', {
+      method: 'GET',
+      headers:
+      {
+        'Authorization': localStorage.getItem('jwtToken')
+      }
+      })
       .then(res => res.json())
       .then(data => this.setState({ users: data }))
       .then(() => console.log(this.state.users))
@@ -33,12 +45,24 @@ export default class DevicesOperations extends React.Component {
   }
 
   refreshData = () => {
-    fetch('http://localhost:8082/user')
+    fetch('http://localhost:8082/user', {
+      method: 'GET',
+      headers:
+      {
+        'Authorization': localStorage.getItem('jwtToken')
+      }
+      })
       .then(res => res.json())
       .then(data => this.setState({ users: data }))
       .catch(err => console.log(err));
 
-    fetch('http://your-api-url/devices')
+    fetch('http://localhost:8083/devices', {
+      method: 'GET',
+      headers:
+      {
+        'Authorization': localStorage.getItem('jwtToken')
+      }
+      })
       .then(response => response.json())
       .then(data => this.setState({ devices: data }))
       .catch(err => console.log(err));
@@ -49,7 +73,11 @@ export default class DevicesOperations extends React.Component {
   handleDeleteDevice(id) {
     // Send DELETE request to server to delete device with given id
     fetch(`http://localhost:8083/device/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers:
+      {
+        'Authorization': localStorage.getItem('jwtToken')
+      }
     })
       .then(res => {
         if (res.ok) {
@@ -71,7 +99,8 @@ export default class DevicesOperations extends React.Component {
     fetch(`http://localhost:8083/device/${device.id}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('jwtToken')
       },
       body: JSON.stringify({
         userUuid: device.userId,
@@ -98,7 +127,8 @@ export default class DevicesOperations extends React.Component {
     const requestOptions = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('jwtToken')
       },
       body: JSON.stringify({
           userUuid: this.state.newDeviceUserUuid,

@@ -18,4 +18,8 @@ public interface UserService {
     UserDTO getUserByUsername(String username);
 
     void deleteUser(UUID uuid);
+
+    List<UserDTO> getAllAdmins();
+
+    UserDTO getUserById(UUID uuid);
 }

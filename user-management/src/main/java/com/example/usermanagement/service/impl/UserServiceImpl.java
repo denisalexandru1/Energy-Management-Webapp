@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
             return userMapper.toDTO(user);
         }
         else{
-            throw new InvalidParameterException("There is no user with username" + username);
+            throw new InvalidParameterException("There is no user with username " + username);
         }
     }
 
@@ -72,6 +72,22 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findById(uuid);
         if (user.isPresent()) {
             userRepository.delete(user.get());
+        } else {
+            throw new InvalidParameterException("There is no user with id" + uuid);
+        }
+    }
+
+    @Override
+    public List<UserDTO> getAllAdmins() {
+        List<User> users = userRepository.findAllByIsAdmin(true);
+        return users.stream().map(userMapper::toDTO).collect(toList());
+    }
+
+    @Override
+    public UserDTO getUserById(UUID uuid) {
+        Optional<User> user = userRepository.findById(uuid);
+        if (user.isPresent()) {
+            return userMapper.toDTO(user.get());
         } else {
             throw new InvalidParameterException("There is no user with id" + uuid);
         }

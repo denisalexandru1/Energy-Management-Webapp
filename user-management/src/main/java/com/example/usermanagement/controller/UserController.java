@@ -1,8 +1,10 @@
 package com.example.usermanagement.controller;
 
+import com.example.usermanagement.authorization.TokenValidator;
 import com.example.usermanagement.dto.UserDTO;
 import com.example.usermanagement.dto.UserRegisterDTO;
 import com.example.usermanagement.service.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,13 +16,20 @@ import java.util.UUID;
 @RestController
 public class UserController {
     private final UserService userService;
+    private final TokenValidator tokenValidator;
 
     public UserController(UserService userService){
         this.userService = userService;
+        tokenValidator = new TokenValidator();
     }
 
     @PostMapping ("/user")
-    ResponseEntity<UserDTO> createUser(@RequestBody UserRegisterDTO dto){
+    ResponseEntity<UserDTO> createUser(@RequestBody UserRegisterDTO dto, @RequestHeader (HttpHeaders.AUTHORIZATION) String token)
+    {
+        if(tokenValidator.validate(token) == false){
+            return ResponseEntity.badRequest().build();
+        }
+
         UserDTO registeredUser = userService.registerUser(dto);
 
         WebClient client = WebClient.create("http://172.30.0.5:8081");
@@ -38,13 +47,33 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    ResponseEntity<List<UserDTO>> getAllUsers(){
+    ResponseEntity<List<UserDTO>> getAllUsers(@RequestHeader (HttpHeaders.AUTHORIZATION) String token)
+    {
+        if(tokenValidator.validate(token) == false){
+            return ResponseEntity.badRequest().build();
+        }
+
         List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/user/{id}")
+    ResponseEntity<UserDTO> getUserById(@PathVariable("id") UUID uuid, @RequestHeader (HttpHeaders.AUTHORIZATION) String token)
+    {
+        if(tokenValidator.validate(token) == false){
+            return ResponseEntity.badRequest().build();
+        }
+
+        UserDTO user = userService.getUserById(uuid);
+        return ResponseEntity.ok(user);
+    }
+
     @PutMapping("/user/{id}")
-    ResponseEntity<UserDTO> updateUser(@PathVariable("id") UUID uuid, @RequestBody UserDTO dto){
+    ResponseEntity<UserDTO> updateUser(@PathVariable("id") UUID uuid, @RequestBody UserDTO dto, @RequestHeader (HttpHeaders.AUTHORIZATION) String token){
+        if(tokenValidator.validate(token) == false){
+            return ResponseEntity.badRequest().build();
+        }
+
         UserDTO updatedUser = userService.updateUser(uuid, dto);
 
         WebClient client = WebClient.create("http://172.30.0.5:8081");
@@ -62,7 +91,12 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
-    ResponseEntity<?> deleteUser(@PathVariable("id") UUID uuid){
+    ResponseEntity<?> deleteUser(@PathVariable("id") UUID uuid, @RequestHeader (HttpHeaders.AUTHORIZATION) String token)
+    {
+        if(tokenValidator.validate(token) == false){
+            return ResponseEntity.badRequest().build();
+        }
+
         userService.deleteUser(uuid);
 
         WebClient client = WebClient.create("http://172.30.0.5:8081");
@@ -76,5 +110,16 @@ public class UserController {
             throw new RuntimeException("Error while deleting user from device management service");
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/user/admins")
+    ResponseEntity<?> getAllAdmins(@RequestHeader (HttpHeaders.AUTHORIZATION) String token)
+    {
+        if(tokenValidator.validate(token) == false){
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<UserDTO> admins = userService.getAllAdmins();
+        return ResponseEntity.ok(admins);
     }
 }
