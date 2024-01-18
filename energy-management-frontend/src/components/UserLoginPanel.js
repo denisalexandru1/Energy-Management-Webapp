@@ -37,7 +37,7 @@ export default class UserLoginPanel extends React.Component {
       .then(body => {
         console.log(body.token);
 
-        if (body.token) {
+        if (body.token !== undefined) {
           this.props.setToken(body.token);
           console.log("Token saved");
           this.props.setLoggedIn();
@@ -48,6 +48,7 @@ export default class UserLoginPanel extends React.Component {
           console.log("Logged in successfully");
           alert("Logged in successfully");
         } else {
+          alert("invalid token: " + body.token)
           console.log("Invalid username or password");
           alert("Invalid username or password");
         }

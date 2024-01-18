@@ -11,7 +11,7 @@ const ChatComponent = ({ senderId, receiverId }) => {
 
   const [receiverUsername, setReceiverUsername] = useState('');
 
-  fetch(`http://localhost:8080/user/${receiverId}`, {
+  fetch(`http://localhost:8082/user/${receiverId}`, {
     method: 'GET',
     headers: {
       'Authorization': localStorage.getItem('jwtToken')
@@ -29,9 +29,9 @@ const ChatComponent = ({ senderId, receiverId }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
-  const socket = new SockJS(`http://localhost:8083/ws`, null, {
+  const socket = new SockJS(`http://localhost:8091/ws`, null, {
     transports: ['websocket', 'xhr-polling', 'iframe-eventsource'],
-    origins: 'http://localhost:3000',
+    origins: 'http://localhost:3001',
   });
 
 
@@ -60,9 +60,9 @@ const ChatComponent = ({ senderId, receiverId }) => {
   //     const payload = {
   //       senderId: senderId,
   //       receiverId: receiverId,
-  //       typing: true,
+  //       isTyping: true,
   //     };
-  
+  //
   //     chatStompClient.publish({
   //       destination: '/destination/typing',
   //       body: JSON.stringify(payload),
@@ -108,7 +108,7 @@ const ChatComponent = ({ senderId, receiverId }) => {
 
     // const processTyping = (typingMessage) => {
     //   const jsonTypingMessage = JSON.parse(typingMessage.body);
-  
+    //
     //   if (jsonTypingMessage.senderId === receiverId) {
     //     setIsTyping(jsonTypingMessage.typing);
     //   }
@@ -121,6 +121,7 @@ const ChatComponent = ({ senderId, receiverId }) => {
 
   return (
     <Box sx={{ width: '100%', marginTop: 2 }}>
+    <h3>Sender id: {senderId}, Receiver id: {receiverId}</h3>
     <h2>Chat with {receiverUsername}</h2>
       <Box
         sx={{
@@ -139,13 +140,13 @@ const ChatComponent = ({ senderId, receiverId }) => {
         </div>
         ))}
 
-        {/* {isTyping && (
-          <div style={{ textAlign: 'left' }}>
-            <strong>
-              {receiverUsername} is typing...
-            </strong>
-          </div>
-        )} */}
+        {/*{isTyping && (*/}
+        {/*    <div style={{ textAlign: 'left' }}>*/}
+        {/*      <strong>*/}
+        {/*        {receiverUsername} is typing...*/}
+        {/*      </strong>*/}
+        {/*    </div>*/}
+        {/*)}*/}
 
       </Box>
       <Box sx={{ marginTop: 2 }}>

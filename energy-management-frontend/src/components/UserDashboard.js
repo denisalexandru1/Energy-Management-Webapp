@@ -19,7 +19,7 @@ export default function UserDashboard(props) {
   }, []);
 
   const fetchAdmins = () => {
-    fetch('http://localhost:8080/user/admins', {
+    fetch('http://localhost:8082/user/admins', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

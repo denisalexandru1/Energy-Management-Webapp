@@ -96,6 +96,17 @@ services:
         demo_net:
             ipv4_address: 172.30.0.6
 
+  spring-chat:
+    restart: always
+    build:
+      context: ./chat-microservice
+      dockerfile: ./Dockerfile
+    ports:
+      - "8091:8091"
+    networks:
+        demo_net:
+            ipv4_address: 172.30.0.9
+
   rabbitmq:
     image: rabbitmq:management
     hostname: rabbitmq
